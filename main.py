@@ -1,34 +1,17 @@
 import requests
-from bs4 import BeautifulSoup
-import re
 
-url = "https://hooshmandyadak.ir/products?ordering=NEWEST"
-
-r = requests.get(
-    url,
-    headers={"User-Agent": "Mozilla/5.0"}
-)
-
-soup = BeautifulSoup(r.text, "html.parser")
-
-scripts = [
-    s["src"] for s in soup.find_all("script", src=True)
+urls = [
+    "https://hooshmandyadak.ir/customer/products/",
+    "https://hooshmandyadak.ir/customer/products/?limit=20",
 ]
 
-for src in scripts:
-    try:
-        js = requests.get(src).text
+for url in urls:
+    print("\nURL:", url)
 
-        if "product" in js.lower() or "api" in js.lower():
-            print("\nFILE:", src)
-            print("SIZE:", len(js))
+    r = requests.get(
+        url,
+        headers={"User-Agent": "Mozilla/5.0"}
+    )
 
-            for x in re.findall(
-                r'.{0,80}(?:product|api).{0,120}',
-                js,
-                re.I
-            )[:5]:
-                print(x)
-
-    except:
-        pass
+    print("STATUS:", r.status_code)
+    print(r.text[:500])
