@@ -5,5 +5,8 @@ url = "https://digifycdn.com/front-statics/digitheme/production/_next/static/chu
 
 js = requests.get(url).text
 
-for x in re.findall(r'https?://[^"\']+', js):
-    print(x)
+for match in re.finditer("customer/products", js):
+    start = max(0, match.start()-300)
+    end = match.start()+300
+    print("---------")
+    print(js[start:end])
