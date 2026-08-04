@@ -1,9 +1,13 @@
 import requests
+import re
 
 url = "https://digifycdn.com/front-statics/digitheme/production/_next/static/chunks/pages/_app-deb46a1d53eec79b.js"
 
 js = requests.get(url).text
 
-start = js.find("getCategories")
+for word in ["baseURL", "backend-service", "axios", "apiURL"]:
+    print("\nWORD:", word)
 
-print(js[start:start+2000])
+    for m in re.finditer(word, js):
+        print(js[m.start()-200:m.start()+300])
+        break
