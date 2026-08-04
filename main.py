@@ -1,18 +1,34 @@
 import requests
+from bs4 import BeautifulSoup
 import re
 
-url = "https://digifycdn.com/front-statics/digitheme/production/_next/static/chunks/pages/products/%5B%5B...categoryNames%5D%5D-88e4f3df83f780d8.js"
+url = "https://hooshmandyadak.ir/products?ordering=NEWEST"
 
-r = requests.get(url)
+r = requests.get(
+    url,
+    headers={"User-Agent": "Mozilla/5.0"}
+)
 
-text = r.text
+soup = BeautifulSoup(r.text, "html.parser")
 
-print("LENGTH:", len(text))
+scripts = [
+    s["src"] for s in soup.find_all("script", src=True)
+]
 
-for word in ["product", "products", "api", "queryKey", "getProducts"]:
-    print(word, text.find(word))
+for src in scripts:
+    try:
+        js = requests.get(src).text
 
-# قسمت‌هایی که api دارند
-for match in re.findall(r'.{0,80}api.{0,120}', text):
-    print("----")
-    print(match)
+        if "product" in js.lower() or "api" in js.lower():
+            print("\nFILE:", src)
+            print("SIZE:", len(js))
+
+            for x in re.findall(
+                r'.{0,80}(?:product|api).{0,120}',
+                js,
+                re.I
+            )[:5]:
+                print(x)
+
+    except:
+        pass
