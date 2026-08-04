@@ -20,3 +20,4 @@ for url in urls:
 
     for a in soup.find_all("a", href=True)[:20]:
         print(a.get_text(strip=True), a["href"])
+print("TEST HTML STARTED")
