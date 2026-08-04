@@ -11,13 +11,16 @@ r = requests.get(
 
 soup = BeautifulSoup(r.text, "html.parser")
 
-next_data = soup.find("script", id="__NEXT_DATA__")
+data = json.loads(
+    soup.find("script", id="__NEXT_DATA__").text
+)
 
-data = json.loads(next_data.text)
+queries = data["props"]["dehydratedState"]["queries"]
 
-text = json.dumps(data, ensure_ascii=False)
+print("QUERY COUNT:", len(queries))
 
-for word in ["products", "items", "title", "price", "image"]:
-    print(word, text.find(word))
-
-print("LENGTH:", len(text))
+for q in queries:
+    print("----------------")
+    print(q.keys())
+    print("QUERY KEY:")
+    print(q.get("queryKey"))
