@@ -1,3 +1,4 @@
+raise Exception("NEW MAIN FILE TEST")
 import requests
 from bs4 import BeautifulSoup
 
