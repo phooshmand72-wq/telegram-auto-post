@@ -1,31 +1,9 @@
 import requests
-from bs4 import BeautifulSoup
 
-page = "https://hooshmandyadak.ir/products?ordering=NEWEST"
+url = "https://digifycdn.com/front-statics/digitheme/production/_next/static/chunks/pages/_app-deb46a1d53eec79b.js"
 
-r = requests.get(
-    page,
-    headers={"User-Agent": "Mozilla/5.0"}
-)
+js = requests.get(url).text
 
-soup = BeautifulSoup(r.text, "html.parser")
+start = js.find("getCategories")
 
-scripts = [
-    s["src"] for s in soup.find_all("script", src=True)
-]
-
-for src in scripts:
-    try:
-        js = requests.get(src).text
-
-        if "customer/product" in js:
-            print("\nFOUND IN:", src)
-
-            pos = js.find("customer/product")
-
-            print(
-                js[pos-300:pos+300]
-            )
-
-    except Exception as e:
-        pass
+print(js[start:start+2000])
