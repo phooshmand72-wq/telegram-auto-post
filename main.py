@@ -1,13 +1,20 @@
 import requests
-import re
 
-url = "https://digifycdn.com/front-statics/digitheme/production/_next/static/chunks/pages/_app-deb46a1d53eec79b.js"
+urls = [
+    "https://hooshmandyadak.ir/backend/customer/products/",
+    "https://hooshmandyadak.ir/backend/customer/blogs/articles/"
+]
 
-js = requests.get(url).text
+for url in urls:
+    print("\nURL:", url)
 
-for word in ["baseURL", "backend-service", "axios", "apiURL"]:
-    print("\nWORD:", word)
+    r = requests.get(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0",
+            "accept-language": "fa-IR"
+        }
+    )
 
-    for m in re.finditer(word, js):
-        print(js[m.start()-200:m.start()+300])
-        break
+    print("STATUS:", r.status_code)
+    print(r.text[:1000])
