@@ -1,17 +1,9 @@
 import requests
+import re
 
-urls = [
-    "https://hooshmandyadak.ir/customer/products/",
-    "https://hooshmandyadak.ir/customer/products/?limit=20",
-]
+url = "https://digifycdn.com/front-statics/digitheme/production/_next/static/chunks/pages/_app-deb46a1d53eec79b.js"
 
-for url in urls:
-    print("\nURL:", url)
+js = requests.get(url).text
 
-    r = requests.get(
-        url,
-        headers={"User-Agent": "Mozilla/5.0"}
-    )
-
-    print("STATUS:", r.status_code)
-    print(r.text[:500])
+for x in re.findall(r'https?://[^"\']+', js):
+    print(x)
