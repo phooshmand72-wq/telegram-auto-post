@@ -1,12 +1,31 @@
 import requests
-import re
+from bs4 import BeautifulSoup
 
-url = "https://digifycdn.com/front-statics/digitheme/production/_next/static/chunks/pages/_app-deb46a1d53eec79b.js"
+page = "https://hooshmandyadak.ir/products?ordering=NEWEST"
 
-js = requests.get(url).text
+r = requests.get(
+    page,
+    headers={"User-Agent": "Mozilla/5.0"}
+)
 
-for match in re.finditer("customer/products", js):
-    start = max(0, match.start()-300)
-    end = match.start()+300
-    print("---------")
-    print(js[start:end])
+soup = BeautifulSoup(r.text, "html.parser")
+
+scripts = [
+    s["src"] for s in soup.find_all("script", src=True)
+]
+
+for src in scripts:
+    try:
+        js = requests.get(src).text
+
+        if "customer/product" in js:
+            print("\nFOUND IN:", src)
+
+            pos = js.find("customer/product")
+
+            print(
+                js[pos-300:pos+300]
+            )
+
+    except Exception as e:
+        pass
