@@ -1,20 +1,25 @@
 import requests
 
-urls = [
-    "https://hooshmandyadak.ir/backend/customer/products/",
-    "https://hooshmandyadak.ir/backend/customer/blogs/articles/"
-]
+url = "https://hooshmandyadak.ir/backend/customer/products/"
 
-for url in urls:
-    print("\nURL:", url)
+headers = {
+    "User-Agent": "Mozilla/5.0",
+    "accept": "application/json",
+    "accept-language": "fa-IR",
+    "referer": "https://hooshmandyadak.ir/products?ordering=NEWEST",
+    "x-requested-with": "XMLHttpRequest"
+}
 
-    r = requests.get(
-        url,
-        headers={
-            "User-Agent": "Mozilla/5.0",
-            "accept-language": "fa-IR"
-        }
-    )
+params = {
+    "limit": 20,
+    "offset": 0
+}
 
-    print("STATUS:", r.status_code)
-    print(r.text[:1000])
+r = requests.get(
+    url,
+    headers=headers,
+    params=params
+)
+
+print(r.status_code)
+print(r.text[:1000])
