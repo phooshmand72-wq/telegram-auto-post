@@ -11,26 +11,13 @@ r = requests.get(
 
 soup = BeautifulSoup(r.text, "html.parser")
 
-next_data = soup.find(
-    "script",
-    id="__NEXT_DATA__"
-)
+next_data = soup.find("script", id="__NEXT_DATA__")
 
-if next_data:
-    print("NEXT DATA FOUND")
+data = json.loads(next_data.text)
 
-    data = json.loads(
-        next_data.text
-    )
+text = json.dumps(data, ensure_ascii=False)
 
-    print(data.keys())
+for word in ["products", "items", "title", "price", "image"]:
+    print(word, text.find(word))
 
-    print(
-        json.dumps(
-            data,
-            ensure_ascii=False
-        )[:3000]
-    )
-
-else:
-    print("NO NEXT DATA")
+print("LENGTH:", len(text))
