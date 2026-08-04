@@ -8,13 +8,16 @@ r = requests.get(
     headers={"User-Agent": "Mozilla/5.0"}
 )
 
-soup = BeautifulSoup(r.text, "html.parser")
+print("STATUS:", r.status_code)
+
+html = r.text
+
+print("PRODUCT COUNT:", html.count("/product/"))
+
+soup = BeautifulSoup(html, "html.parser")
 
 for a in soup.find_all("a", href=True):
-    href = a["href"]
-
-    if "/product/" in href:
-        print(
-            a.get_text(strip=True),
-            href
-        )
+    if "product" in a["href"]:
+        print("TEXT:", a.get_text(strip=True))
+        print("LINK:", a["href"])
+        print("----------------")
